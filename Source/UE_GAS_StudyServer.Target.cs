@@ -3,11 +3,11 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class UE_GAS_StudyEditorTarget : TargetRules
+public class UE_GAS_StudyServerTarget : TargetRules
 {
-	public UE_GAS_StudyEditorTarget(TargetInfo Target) : base(Target)
+	public UE_GAS_StudyServerTarget(TargetInfo Target) : base(Target)
 	{
-		Type = TargetType.Editor;
+		Type = TargetType.Server;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
 		ExtraModuleNames.Add("UE_GAS_Study");

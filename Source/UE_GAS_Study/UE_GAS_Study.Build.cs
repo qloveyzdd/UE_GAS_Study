@@ -8,6 +8,25 @@ public class UE_GAS_Study : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		OptimizeCode = CodeOptimization.Never;
+
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core", 
+			"CoreUObject", 
+			"Engine", 
+			"InputCore", 
+			"EnhancedInput",
+			"GameplayAbilities",
+			"GameplayTasks",
+			"GameplayTags",
+			"Slate",
+			"SlateCore",
+			"HTTP",
+			"JsonUtilities",
+			"Json",
+			"ModularGameplay",
+			"UMG",
+		});
 	}
 }

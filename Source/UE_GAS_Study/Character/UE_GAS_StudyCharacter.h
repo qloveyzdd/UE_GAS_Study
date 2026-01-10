@@ -50,8 +50,6 @@ private:
 	UInputAction* LookAction;
 
 
-	
-
 protected:
 
 	/** Called for movement input */

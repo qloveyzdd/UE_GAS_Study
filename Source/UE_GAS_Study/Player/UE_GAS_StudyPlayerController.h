@@ -13,4 +13,17 @@ class UE_GAS_STUDY_API AUE_GAS_StudyPlayerController : public APlayerController
 
 public:
 	AUE_GAS_StudyPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	//当有输入操作时调用该方法
+	virtual void PostProcessInput(const float DeltaTime, const bool bGamePaused) override;
+
+public:
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|PlayerController")
+	class UUE_GAS_StudyAbilitySystemComponent* GetGASStudyAbilitySystemComponent() const;
+
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|PlayerController")
+	class AUE_GAS_StudyHUD* GetGASStudyHUD() const;
+
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|PlayerController")
+	class AUE_GAS_StudyPlayerState* GetGASStudyPlayerState() const;
 };

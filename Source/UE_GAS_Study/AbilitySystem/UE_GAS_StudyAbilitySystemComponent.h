@@ -13,5 +13,20 @@ class UE_GAS_STUDY_API UUE_GAS_StudyAbilitySystemComponent : public UAbilitySyst
 
 public:
 	UUE_GAS_StudyAbilitySystemComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+public:
+	void AbilityInputTagPressed(const FGameplayTag& InputTag);
+	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+
+	void ProcessAbilityInput(float DeltaTime, bool bGamePaused);
+	void ClearAbilityInput();
 	
+protected:
+	virtual void AbilitySpecInputPressed(FGameplayAbilitySpec& Spec) override;
+	virtual void AbilitySpecInputReleased(FGameplayAbilitySpec& Spec) override;
+
+protected:
+	TArray<FGameplayAbilitySpecHandle> InputPressedSpecHandles;
+	TArray<FGameplayAbilitySpecHandle> InputReleasedSpecHandles;
+	TArray<FGameplayAbilitySpecHandle> InputHeldSpecHandles;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "GameplayCueInterface.h"
 #include "GameplayTagAssetInterface.h"
 #include "GameFramework/Character.h"
@@ -26,6 +27,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
+protected:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="UE_GAS_Study|Ability", meta=(AllowPrivateAccess=true))
+	TMap<FGameplayTag,TSubclassOf<class UUE_GAS_StudyGameplayAbility>> AbilitiesToAdd;
+	
+	TMap<FGameplayTag,FGameplayAbilitySpecHandle> AbilitiesToActive;
 
 public:
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")

@@ -57,7 +57,10 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+	
+	/** Called for Jump input */
+	void ActiveJump();
+	void UnActiveJump();
 
 protected:
 	// APawn interface

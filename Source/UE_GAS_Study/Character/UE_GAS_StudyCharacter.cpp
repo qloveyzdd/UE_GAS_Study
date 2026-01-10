@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "UE_GAS_Study/UE_GAS_StudyGameplayTag.h"
+#include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -79,8 +81,8 @@ void AUE_GAS_StudyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::ActiveJump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AUE_GAS_StudyCharacter::UnActiveJump);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUE_GAS_StudyCharacter::Move);
@@ -128,4 +130,18 @@ void AUE_GAS_StudyCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AUE_GAS_StudyCharacter::ActiveJump()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag_Jump"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::UnActiveJump()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag_Jump"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
 }

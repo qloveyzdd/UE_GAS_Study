@@ -1,6 +1,7 @@
 #include "UE_GAS_StudyCharacterBase.h"
 
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
+#include "UE_GAS_Study/AbilitySystem/Abilities/UE_GAS_StudyGameplayAbility.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerController.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerState.h"
 
@@ -23,11 +24,25 @@ AUE_GAS_StudyCharacterBase::AUE_GAS_StudyCharacterBase(const FObjectInitializer&
 void AUE_GAS_StudyCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	//GAS只能在服务器上注册
 	if (AbilitySystemComponent && GetLocalRole() == ENetRole::ROLE_Authority)
 	{
-		AbilitySystemComponent->InitAbilityActorInfo(this,this);
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+		//批量注册能力
+		for (auto& TempAbilityPair : AbilitiesToAdd)
+		{
+			UUE_GAS_StudyGameplayAbility* AbilityCDO = TempAbilityPair.Value->
+			                                                           GetDefaultObject<UUE_GAS_StudyGameplayAbility>();
+			FGameplayAbilitySpec AbilitySpec(AbilityCDO,1);
+			AbilitySpec.SourceObject = this;
+			AbilitySpec.DynamicAbilityTags.AddTag(TempAbilityPair.Key);
+			//向GAS系统组件注册能力
+			const FGameplayAbilitySpecHandle AbilitySpecHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+			
+			AbilitiesToActive.Add(TempAbilityPair.Key, AbilitySpecHandle);
+		}
 	}
 }
 

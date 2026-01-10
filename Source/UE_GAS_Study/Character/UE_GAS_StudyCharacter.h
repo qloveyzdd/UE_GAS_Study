@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "UE_GAS_StudyCharacterBase.h"
 #include "Logging/LogMacros.h"
 #include "UE_GAS_StudyCharacter.generated.h"
 
@@ -16,9 +16,14 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AUE_GAS_StudyCharacter : public ACharacter
+class UE_GAS_STUDY_API AUE_GAS_StudyCharacter : public AUE_GAS_StudyCharacterBase
 {
 	GENERATED_BODY()
+	
+public:
+	AUE_GAS_StudyCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	
+private:
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -44,8 +49,7 @@ class AUE_GAS_StudyCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
-public:
-	AUE_GAS_StudyCharacter();
+
 	
 
 protected:

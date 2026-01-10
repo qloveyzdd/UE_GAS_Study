@@ -6,7 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "UE_GAS_StudyGameMode.generated.h"
 
-UCLASS(minimalapi)
+UCLASS(MinimalAPI)
 class AUE_GAS_StudyGameMode : public AGameModeBase
 {
 	GENERATED_BODY()

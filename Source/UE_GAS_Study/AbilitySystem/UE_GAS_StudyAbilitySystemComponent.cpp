@@ -113,6 +113,6 @@ void UUE_GAS_StudyAbilitySystemComponent::AbilitySpecInputReleased(FGameplayAbil
 	
 	if (Spec.IsActive())
 	{
-		InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed,Spec.Handle,Spec.ActivationInfo.GetActivationPredictionKey());
+		InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased,Spec.Handle,Spec.ActivationInfo.GetActivationPredictionKey());
 	}
 }

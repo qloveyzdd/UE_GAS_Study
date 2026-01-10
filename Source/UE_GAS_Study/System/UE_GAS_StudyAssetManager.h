@@ -14,4 +14,5 @@ class UE_GAS_STUDY_API UUE_GAS_StudyAssetManager : public UAssetManager
 public:
 	UUE_GAS_StudyAssetManager();
 	
+	virtual void StartInitialLoading() override;
 };

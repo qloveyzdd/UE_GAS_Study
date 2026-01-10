@@ -134,14 +134,14 @@ void AUE_GAS_StudyCharacter::Look(const FInputActionValue& Value)
 
 void AUE_GAS_StudyCharacter::ActiveJump()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag_Jump"),true);
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Jump"),true);
 	
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::UnActiveJump()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag_Jump"),true);
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Jump"),true);
 	
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
 }

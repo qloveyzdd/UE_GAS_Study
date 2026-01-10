@@ -20,6 +20,22 @@ AUE_GAS_StudyCharacterBase::AUE_GAS_StudyCharacterBase(const FObjectInitializer&
 	NetUpdateFrequency = 100.0f;
 }
 
+void AUE_GAS_StudyCharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	//GAS只能在服务器上注册
+	if (AbilitySystemComponent && GetLocalRole() == ENetRole::ROLE_Authority)
+	{
+		AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	}
+}
+
+void AUE_GAS_StudyCharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+}
+
 UAbilitySystemComponent* AUE_GAS_StudyCharacterBase::GetAbilitySystemComponent() const
 {
 	return GetAbilitySystemComponent();

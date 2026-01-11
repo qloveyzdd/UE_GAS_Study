@@ -13,8 +13,12 @@ public:
 	UUE_GAS_StudyGameplayAbility(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 public:
+	UFUNCTION(BlueprintCallable,Category="GAS_Study|Ability")
 	class UUE_GAS_StudyAbilitySystemComponent* GetGas_StudyAbilitySystemComponentFromActorInfo() const;
+	UFUNCTION(BlueprintCallable,Category="GAS_Study|Ability")
 	class AUE_GAS_StudyPlayerController* GetGas_StudyPlayerControllerFromActorInfo() const;
+	UFUNCTION(BlueprintCallable,Category="GAS_Study|Ability")
 	class AController* GetGas_StudyControllerFromActorInfo() const;
+	UFUNCTION(BlueprintCallable,Category="GAS_Study|Ability")
 	class AUE_GAS_StudyCharacterBase* GetGas_StudyCharacterFromActorInfo() const;
 };

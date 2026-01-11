@@ -20,6 +20,9 @@ protected:
 	//引入GAS组件
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|GAS", meta=(AllowPrivateAccess=true))
 	TObjectPtr<class UUE_GAS_StudyAbilitySystemComponent> AbilitySystemComponent;
+	//联机组件
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|Character", meta=(AllowPrivateAccess=true))
+	TObjectPtr<class UUE_GAS_StudyComboComponent> ComboComponent;
 
 public:
 	AUE_GAS_StudyCharacterBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());

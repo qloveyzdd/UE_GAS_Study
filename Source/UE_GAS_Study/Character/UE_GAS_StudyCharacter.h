@@ -48,6 +48,10 @@ private:
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
+	
+	/** Melee Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* MeleeAction;
 
 
 protected:
@@ -61,6 +65,9 @@ protected:
 	/** Called for Jump input */
 	void ActiveJump();
 	void UnActiveJump();
+	
+	/** Called for Melee input */
+	void ActiveMelee();
 
 protected:
 	// APawn interface

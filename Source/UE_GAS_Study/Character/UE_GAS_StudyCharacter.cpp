@@ -89,6 +89,9 @@ void AUE_GAS_StudyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE_GAS_StudyCharacter::Look);
+		
+		//Melee
+		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::ActiveMelee);
 	}
 	else
 	{
@@ -144,4 +147,11 @@ void AUE_GAS_StudyCharacter::UnActiveJump()
 	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Jump"),true);
 	
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::ActiveMelee()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Melee"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }

@@ -68,6 +68,9 @@ protected:
 	
 	/** Called for Melee input */
 	void ActiveMelee();
+	
+public:
+	void ComboMelee();
 
 protected:
 	// APawn interface

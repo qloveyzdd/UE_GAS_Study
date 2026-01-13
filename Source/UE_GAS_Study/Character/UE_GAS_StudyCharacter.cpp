@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "UE_GAS_Study/UE_GAS_StudyGameplayTag.h"
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
+#include "UE_GAS_Study/Component/UE_GAS_StudyComboComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -151,7 +152,18 @@ void AUE_GAS_StudyCharacter::UnActiveJump()
 
 void AUE_GAS_StudyCharacter::ActiveMelee()
 {
+	GetGASStudyComboComponent()->SetPressed();
+	
 	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Melee"),true);
 	
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::ComboMelee()
+{
+	if (GetLocalRole() == ROLE_AutonomousProxy)
+	{
+		GetAbilitySystemComponent()->StopMontageIfCurrent(*GetGASStudyComboComponent()->GetLastPlayAnimMontage());
+		ActiveMelee();
+	}
 }

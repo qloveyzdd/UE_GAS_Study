@@ -40,6 +40,8 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
 	class UUE_GAS_StudyAbilitySystemComponent* GetGASStudyAbilitySystemComponent() const;
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
+	class UUE_GAS_StudyComboComponent* GetGASStudyComboComponent() const;
 
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
 	class AUE_GAS_StudyPlayerController* GetGASStudyPlayerController() const;
@@ -48,7 +50,7 @@ public:
 	class AUE_GAS_StudyPlayerState* GetGASStudyPlayerState() const;
 
 public:
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	//获取自身标签
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;

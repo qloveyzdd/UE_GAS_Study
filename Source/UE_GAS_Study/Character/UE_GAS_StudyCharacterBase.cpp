@@ -59,9 +59,14 @@ void AUE_GAS_StudyCharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReaso
 	Super::EndPlay(EndPlayReason);
 }
 
+class UUE_GAS_StudyComboComponent* AUE_GAS_StudyCharacterBase::GetGASStudyComboComponent() const
+{
+	return CastChecked<UUE_GAS_StudyComboComponent>(ComboComponent, ECastCheckedType::NullAllowed);
+}
+
 UAbilitySystemComponent* AUE_GAS_StudyCharacterBase::GetAbilitySystemComponent() const
 {
-	return GetAbilitySystemComponent();
+	return AbilitySystemComponent;
 }
 
 void AUE_GAS_StudyCharacterBase::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const

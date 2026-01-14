@@ -2,6 +2,7 @@
 
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
 #include "UE_GAS_Study/AbilitySystem/Abilities/UE_GAS_StudyGameplayAbility.h"
+#include "UE_GAS_Study/AbilitySystem/Attributes/UE_GAS_StudyCharacterAttributeSet.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyComboComponent.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerController.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerState.h"
@@ -19,6 +20,7 @@ AUE_GAS_StudyCharacterBase::AUE_GAS_StudyCharacterBase(const FObjectInitializer&
 	//同步内容多少可调节
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
+	CharacterSet = CreateDefaultSubobject<UUE_GAS_StudyCharacterAttributeSet>(TEXT("CharacterSet"));
 
 	ComboComponent = CreateDefaultSubobject<
 		UUE_GAS_StudyComboComponent>(TEXT("ComboComponent"));

@@ -1,4 +1,4 @@
-#include "UE_GAS_StudyDamageExcution.h"
+#include "UE_GAS_StudyDamageExecution.h"
 
 #include "UE_GAS_Study/AbilitySystem/Attributes/UE_GAS_StudyCharacterAttributeSet.h"
 
@@ -21,12 +21,12 @@ static FDamageStatics& DamageStatics()
 }
 
 
-UUE_GAS_StudyDamageExcution::UUE_GAS_StudyDamageExcution()
+UUE_GAS_StudyDamageExecution::UUE_GAS_StudyDamageExecution()
 {
 	RelevantAttributesToCapture.Add(DamageStatics().BaseDamageDef);
 }
 
-void UUE_GAS_StudyDamageExcution::Execute_Implementation(
+void UUE_GAS_StudyDamageExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {

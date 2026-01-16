@@ -60,6 +60,7 @@ void AUE_GAS_StudyCharacterBase::BeginPlay()
 			AbilitiesToActive.Add(TempAbilityPair.Key, AbilitySpecHandle);
 		}
 	}
+	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent);
 }
 
 void AUE_GAS_StudyCharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)

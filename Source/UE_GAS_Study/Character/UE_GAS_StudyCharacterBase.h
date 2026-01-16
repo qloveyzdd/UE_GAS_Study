@@ -22,29 +22,47 @@ protected:
 	TObjectPtr<class UUE_GAS_StudyAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
 	TObjectPtr<const class UUE_GAS_StudyCharacterAttributeSet> CharacterSet;
-	
-	//联机组件
+
+	//连击组件
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|Character", meta=(AllowPrivateAccess=true))
 	TObjectPtr<class UUE_GAS_StudyComboComponent> ComboComponent;
+	//生命组件
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|Character", meta=(AllowPrivateAccess=true))
+	TObjectPtr<class UUE_GAS_StudyHealthComponent> HealthComponent;
 
 public:
 	AUE_GAS_StudyCharacterBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	UFUNCTION()
+	virtual void OnDeathStarted(AActor* OwningActor);
+	UFUNCTION()
+	virtual void OnDeathFinished(AActor* OwningActor);
 	
+	void DisableMovementAndCollision();
+	
+	void DestroyDueToDeath();
+	void UninitAndDestroy();
+	
+	UFUNCTION(BlueprintImplementableEvent,meta=(DisplayName="OnDeathFinished"))
+	void K2_OnDeathFinished();
+
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="UE_GAS_Study|Ability", meta=(AllowPrivateAccess=true))
-	TMap<FGameplayTag,TSubclassOf<class UUE_GAS_StudyGameplayAbility>> AbilitiesToAdd;
-	
-	TMap<FGameplayTag,FGameplayAbilitySpecHandle> AbilitiesToActive;
+	TMap<FGameplayTag, TSubclassOf<class UUE_GAS_StudyGameplayAbility>> AbilitiesToAdd;
+
+	TMap<FGameplayTag, FGameplayAbilitySpecHandle> AbilitiesToActive;
 
 public:
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
 	class UUE_GAS_StudyAbilitySystemComponent* GetGASStudyAbilitySystemComponent() const;
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
 	class UUE_GAS_StudyComboComponent* GetGASStudyComboComponent() const;
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
+	class UUE_GAS_StudyHealthComponent* GetGASStudyHealthComponent() const;
 
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
 	class AUE_GAS_StudyPlayerController* GetGASStudyPlayerController() const;

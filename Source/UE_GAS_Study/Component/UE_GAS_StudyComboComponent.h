@@ -14,7 +14,7 @@ class UE_GAS_STUDY_API UUE_GAS_StudyComboComponent : public UUE_GAS_StudyCompone
 
 public:
 	// Sets default values for this component's properties
-	UUE_GAS_StudyComboComponent();
+	UUE_GAS_StudyComboComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 protected:
 	// Called when the game starts

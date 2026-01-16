@@ -1,9 +1,12 @@
 #include "UE_GAS_StudyCharacterBase.h"
 
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
 #include "UE_GAS_Study/AbilitySystem/Abilities/UE_GAS_StudyGameplayAbility.h"
 #include "UE_GAS_Study/AbilitySystem/Attributes/UE_GAS_StudyCharacterAttributeSet.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyComboComponent.h"
+#include "UE_GAS_Study/Component/UE_GAS_StudyHealthComponent.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerController.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerState.h"
 
@@ -22,10 +25,13 @@ AUE_GAS_StudyCharacterBase::AUE_GAS_StudyCharacterBase(const FObjectInitializer&
 
 	CharacterSet = CreateDefaultSubobject<UUE_GAS_StudyCharacterAttributeSet>(TEXT("CharacterSet"));
 
-	ComboComponent = CreateDefaultSubobject<
-		UUE_GAS_StudyComboComponent>(TEXT("ComboComponent"));
+	ComboComponent = CreateDefaultSubobject<UUE_GAS_StudyComboComponent>(TEXT("ComboComponent"));
 	ComboComponent->SetIsReplicated(false);
 
+	HealthComponent = CreateDefaultSubobject<UUE_GAS_StudyHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->OnDeathStarted.AddDynamic(this, &ThisClass::OnDeathStarted);
+	HealthComponent->OnDeathFinished.AddDynamic(this, &ThisClass::OnDeathFinished);
+	HealthComponent->SetIsReplicated(true);
 
 	//同步频率更新
 	NetUpdateFrequency = 100.0f;
@@ -61,9 +67,59 @@ void AUE_GAS_StudyCharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReaso
 	Super::EndPlay(EndPlayReason);
 }
 
+void AUE_GAS_StudyCharacterBase::OnDeathStarted(AActor* OwningActor)
+{
+	DisableMovementAndCollision();
+}
+
+void AUE_GAS_StudyCharacterBase::OnDeathFinished(AActor* OwningActor)
+{
+	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::DestroyDueToDeath);
+}
+
+void AUE_GAS_StudyCharacterBase::DisableMovementAndCollision()
+{
+	if (Controller)
+	{
+		Controller->SetIgnoreMoveInput(true);
+	}
+
+	UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
+	check(CapsuleComp);
+	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+	
+	UCharacterMovementComponent* MoveComp = CastChecked<UCharacterMovementComponent>(GetCharacterMovement());
+	MoveComp->StopMovementImmediately();
+	MoveComp->DisableMovement();
+}
+
+void AUE_GAS_StudyCharacterBase::DestroyDueToDeath()
+{
+	K2_OnDeathFinished();
+	UninitAndDestroy();
+}
+
+void AUE_GAS_StudyCharacterBase::UninitAndDestroy()
+{
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		DetachFromControllerPendingDestroy();
+		SetLifeSpan(0.1f);
+	}
+	HealthComponent->UnInitializeWithAbilitySystem(AbilitySystemComponent);
+	
+	SetActorHiddenInGame(true);
+}
+
 class UUE_GAS_StudyComboComponent* AUE_GAS_StudyCharacterBase::GetGASStudyComboComponent() const
 {
 	return CastChecked<UUE_GAS_StudyComboComponent>(ComboComponent, ECastCheckedType::NullAllowed);
+}
+
+class UUE_GAS_StudyHealthComponent* AUE_GAS_StudyCharacterBase::GetGASStudyHealthComponent() const
+{
+	return CastChecked<UUE_GAS_StudyHealthComponent>(HealthComponent, ECastCheckedType::NullAllowed);
 }
 
 UAbilitySystemComponent* AUE_GAS_StudyCharacterBase::GetAbilitySystemComponent() const

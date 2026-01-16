@@ -65,11 +65,11 @@ public:
 	virtual void OnRep_MaxExp(const FGameplayAttributeData& OldValue);
 
 public:
-	FUE_GAS_StudyAttributeSet OnHealthChanged;
-	FUE_GAS_StudyAttributeSet OnMaxHealthChanged;
-	FUE_GAS_StudyAttributeSet OnOutOfHealth;
-	FUE_GAS_StudyAttributeSet OnManaChanged;
-	FUE_GAS_StudyAttributeSet OnMaxManaChanged;
+	mutable FUE_GAS_StudyAttributeEvent OnHealthChanged;
+	mutable FUE_GAS_StudyAttributeEvent OnMaxHealthChanged;
+	mutable FUE_GAS_StudyAttributeEvent OnOutOfHealth;
+	mutable FUE_GAS_StudyAttributeEvent OnManaChanged;
+	mutable FUE_GAS_StudyAttributeEvent OnMaxManaChanged;
 
 private:
 	UPROPERTY(BlueprintReadOnly, Category="UE_GAS_Study|Attribute", ReplicatedUsing=OnRep_Damage,

@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "Components/GameFrameworkComponent.h"
 #include "UE_GAS_StudyComponentBase.generated.h"
 
 
 UCLASS(ClassGroup=Custom, meta=(BlueprintSpawnableComponent))
-class UE_GAS_STUDY_API UUE_GAS_StudyComponentBase : public UActorComponent
+class UE_GAS_STUDY_API UUE_GAS_StudyComponentBase : public UGameFrameworkComponent
 {
 	GENERATED_BODY()
 	

@@ -13,8 +13,14 @@
 
 
 struct FGameplayEffectSpec;
-DECLARE_MULTICAST_DELEGATE_SixParams(FUE_GAS_StudyAttributeSet, AActor*, AActor*, const FGameplayEffectSpec*,
-                                     float, float, float);
+DECLARE_MULTICAST_DELEGATE_SixParams(FUE_GAS_StudyAttributeEvent,
+	AActor* /*EffectInstigator*/,
+	AActor* /*EffectCauser*/,
+	const FGameplayEffectSpec* /*EffectSpec*/,
+	float /*EffectMagnitude*/,
+	float /*OldValue*/,
+	float /*NewValue*/);
+
 
 UCLASS()
 class UE_GAS_STUDY_API UUE_GAS_StudyAttributeSet : public UAttributeSet

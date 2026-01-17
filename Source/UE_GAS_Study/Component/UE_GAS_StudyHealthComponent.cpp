@@ -39,16 +39,16 @@ void UUE_GAS_StudyHealthComponent::GetLifetimeReplicatedProps(TArray<class FLife
 void UUE_GAS_StudyHealthComponent::OnRep_DeathState(EGAS_StudyDeathState OldState)
 {
 	const EGAS_StudyDeathState NewDeathState = DeathState;
-	
+
 	DeathState = OldState;
 
-	if (OldState>NewDeathState)
+	if (OldState > NewDeathState)
 	{
-		UE_LOG(LogGAS_Study,Warning,TEXT("[%d]客户端状态大于服务器状态！！！"),(uint8)OldState);
+		UE_LOG(LogGAS_Study, Warning, TEXT("[%d]客户端状态大于服务器状态！！！"), (uint8)OldState);
 		return;
 	}
 
-	if (OldState==EGAS_StudyDeathState::NotDead)
+	if (OldState == EGAS_StudyDeathState::NotDead)
 	{
 		if (NewDeathState == EGAS_StudyDeathState::DeathStarted)
 		{
@@ -61,10 +61,10 @@ void UUE_GAS_StudyHealthComponent::OnRep_DeathState(EGAS_StudyDeathState OldStat
 		}
 		else
 		{
-			UE_LOG(LogGAS_Study,Error,TEXT("[%d]代码错误！！！"),(uint8)OldState);
+			UE_LOG(LogGAS_Study, Error, TEXT("[%d]代码错误！！！"), (uint8)OldState);
 		}
 	}
-	else if (OldState==EGAS_StudyDeathState::DeathStarted)
+	else if (OldState == EGAS_StudyDeathState::DeathStarted)
 	{
 		if (NewDeathState == EGAS_StudyDeathState::DeathFinished)
 		{
@@ -72,10 +72,10 @@ void UUE_GAS_StudyHealthComponent::OnRep_DeathState(EGAS_StudyDeathState OldStat
 		}
 		else
 		{
-			UE_LOG(LogGAS_Study,Error,TEXT("[%d]代码错误！！！"),(uint8)OldState);
+			UE_LOG(LogGAS_Study, Error, TEXT("[%d]代码错误！！！"), (uint8)OldState);
 		}
 	}
-	ensureMsgf((DeathState==NewDeathState),TEXT("[%d]代码错误！！！"),(uint8)OldState);
+	ensureMsgf((DeathState==NewDeathState), TEXT("[%d]代码错误！！！"), (uint8)OldState);
 }
 
 UUE_GAS_StudyHealthComponent* UUE_GAS_StudyHealthComponent::FindHealthComponent(const AActor* Actor)
@@ -276,6 +276,21 @@ void UUE_GAS_StudyHealthComponent::HandleOutOfChanged(AActor* DamageInstigator, 
 {
 #if WITH_SERVER_CODE
 
+	if (AbilitySystemComponent && DamageEffectSpec)
+	{
+		FGameplayEventData Payload;
+		Payload.EventTag = UE_GAS_StudyGameplayTags::GameplayEvent_Death;
+		Payload.Instigator = DamageInstigator;
+		Payload.Target = AbilitySystemComponent->GetAvatarActor();
+		Payload.OptionalObject = DamageEffectSpec->Def;
+		Payload.ContextHandle = DamageEffectSpec->GetEffectContext();
+		Payload.InstigatorTags = *DamageEffectSpec->CapturedSourceTags.GetAggregatedTags();
+		Payload.TargetTags = *DamageEffectSpec->CapturedTargetTags.GetAggregatedTags();
+		Payload.EventMagnitude = DamageMagnitude;
+
+		FScopedPredictionWindow NewScopedWindow(AbilitySystemComponent, true);
+		AbilitySystemComponent->HandleGameplayEvent(Payload.EventTag, &Payload);
+	}
 
 #endif
 }

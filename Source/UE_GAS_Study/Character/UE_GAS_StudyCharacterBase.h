@@ -55,6 +55,11 @@ protected:
 	TMap<FGameplayTag, TSubclassOf<class UUE_GAS_StudyGameplayAbility>> AbilitiesToAdd;
 
 	TMap<FGameplayTag, FGameplayAbilitySpecHandle> AbilitiesToActive;
+	
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="UE_GAS_Study|Ability", meta=(AllowPrivateAccess=true))
+	TSubclassOf<UUE_GAS_StudyGameplayAbility> DeathAbilityClass;
+	
+	FGameplayAbilitySpecHandle DeathAbilityHandle;
 
 public:
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")

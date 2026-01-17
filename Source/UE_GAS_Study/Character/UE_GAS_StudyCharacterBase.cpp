@@ -59,12 +59,22 @@ void AUE_GAS_StudyCharacterBase::BeginPlay()
 
 			AbilitiesToActive.Add(TempAbilityPair.Key, AbilitySpecHandle);
 		}
+		
+		UUE_GAS_StudyGameplayAbility* DeathAbilityCDO = DeathAbilityClass->GetDefaultObject<UUE_GAS_StudyGameplayAbility>();
+		FGameplayAbilitySpec DeathAbilityCDOSpec(DeathAbilityCDO, 1);
+		DeathAbilityCDOSpec.SourceObject = this;
+		DeathAbilityHandle = AbilitySystemComponent->GiveAbility(DeathAbilityCDOSpec);
+		
 	}
 	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent);
 }
 
 void AUE_GAS_StudyCharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	if (AbilitySystemComponent && GetLocalRole() == ENetRole::ROLE_Authority)
+	{
+		AbilitySystemComponent->ClearAllAbilities();
+	}
 	Super::EndPlay(EndPlayReason);
 }
 
@@ -89,7 +99,7 @@ void AUE_GAS_StudyCharacterBase::DisableMovementAndCollision()
 	check(CapsuleComp);
 	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-	
+
 	UCharacterMovementComponent* MoveComp = CastChecked<UCharacterMovementComponent>(GetCharacterMovement());
 	MoveComp->StopMovementImmediately();
 	MoveComp->DisableMovement();
@@ -109,7 +119,7 @@ void AUE_GAS_StudyCharacterBase::UninitAndDestroy()
 		SetLifeSpan(0.1f);
 	}
 	HealthComponent->UnInitializeWithAbilitySystem(AbilitySystemComponent);
-	
+
 	SetActorHiddenInGame(true);
 }
 

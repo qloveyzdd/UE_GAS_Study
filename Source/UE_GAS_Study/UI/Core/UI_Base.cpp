@@ -30,7 +30,7 @@ UWidgetAnimation* UUI_Base::GetNameWidgetAnimation(const FString& InWidgetName) 
 		UWidgetAnimation** MyTempAnimation = TArrayAnimations.FindByPredicate(
 			[&](const UWidgetAnimation* OurAnimation)
 			{
-				return OurAnimation->GetFName().ToString() == InWidgetName + FString("_INST");
+				return OurAnimation->GetFName().ToString() == (InWidgetName + FString("_INST"));
 			});
 		return *MyTempAnimation;
 	}

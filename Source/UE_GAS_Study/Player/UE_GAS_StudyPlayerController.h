@@ -10,6 +10,10 @@ UCLASS(Config=Game, Meta = (ShortTooltip = "The base player controller class use
 class UE_GAS_STUDY_API AUE_GAS_StudyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+	
+private:
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="GAS Study|DanamgNum",meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UUE_GAS_StudyNumberPopComponent_UMG> NumberPopComponent;
 
 public:
 	AUE_GAS_StudyPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
@@ -26,4 +30,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|PlayerController")
 	class AUE_GAS_StudyPlayerState* GetGASStudyPlayerState() const;
+	
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|PlayerController")
+	class UUE_GAS_StudyNumberPopComponent* GetGASStudyNumberPopComponent() const;
 };

@@ -3,11 +3,15 @@
 #include "UE_GAS_StudyPlayerState.h"
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
 #include "UE_GAS_Study/Character/UE_GAS_StudyCharacterBase.h"
+#include "UE_GAS_Study/FeedBack/NumberPopComponent/UE_GAS_StudyNumberPopComponent.h"
+#include "UE_GAS_Study/FeedBack/NumberPopComponent/UE_GAS_StudyNumberPopComponent_UMG.h"
 #include "UE_GAS_Study/UI/UE_GAS_StudyHUD.h"
 
 AUE_GAS_StudyPlayerController::AUE_GAS_StudyPlayerController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+	NumberPopComponent = CreateDefaultSubobject<UUE_GAS_StudyNumberPopComponent_UMG>(TEXT("NumberPopComponent"));
+	NumberPopComponent->SetIsReplicated(false);
 }
 
 void AUE_GAS_StudyPlayerController::PostProcessInput(const float DeltaTime, const bool bGamePaused)
@@ -17,6 +21,11 @@ void AUE_GAS_StudyPlayerController::PostProcessInput(const float DeltaTime, cons
 		ASC->ProcessAbilityInput(DeltaTime,bGamePaused);
 	}
 	Super::PostProcessInput(DeltaTime, bGamePaused);
+}
+
+class UUE_GAS_StudyNumberPopComponent* AUE_GAS_StudyPlayerController::GetGASStudyNumberPopComponent() const
+{
+	return CastChecked<UUE_GAS_StudyNumberPopComponent>(NumberPopComponent, ECastCheckedType::NullAllowed);
 }
 
 class AUE_GAS_StudyPlayerState* AUE_GAS_StudyPlayerController::GetGASStudyPlayerState() const

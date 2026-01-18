@@ -93,6 +93,13 @@ void AUE_GAS_StudyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		
 		//Melee
 		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::ActiveMelee);
+		
+		EnhancedInputComponent->BindAction(AirAttackAction, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::ActiveAirAttack);
+		
+		EnhancedInputComponent->BindAction(KeyAction_1, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_1);
+		EnhancedInputComponent->BindAction(KeyAction_2, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_2);
+		EnhancedInputComponent->BindAction(KeyAction_3, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_3);
+		EnhancedInputComponent->BindAction(KeyAction_4, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_4);
 	}
 	else
 	{
@@ -155,6 +162,41 @@ void AUE_GAS_StudyCharacter::ActiveMelee()
 	GetGASStudyComboComponent()->SetPressed();
 	
 	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Melee"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::ActiveAirAttack()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.AirAttack"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::Key_1()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.1"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::Key_2()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.2"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::Key_3()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.3"),true);
+	
+	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::Key_4()
+{
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.4"),true);
 	
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }

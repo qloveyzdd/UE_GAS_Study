@@ -52,6 +52,27 @@ private:
 	/** Melee Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MeleeAction;
+	
+	/** AirAttack Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AirAttackAction;
+	
+	/** KeyAction_1 Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* KeyAction_1;
+	
+	/** KeyAction_2 Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* KeyAction_2;
+	
+	/** KeyAction_3 Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* KeyAction_3;
+	
+	/** KeyAction_4 Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* KeyAction_4;
+
 
 
 protected:
@@ -68,6 +89,13 @@ protected:
 	
 	/** Called for Melee input */
 	void ActiveMelee();
+	
+	void ActiveAirAttack();
+	
+	void Key_1();
+	void Key_2();
+	void Key_3();
+	void Key_4();
 	
 public:
 	void ComboMelee();

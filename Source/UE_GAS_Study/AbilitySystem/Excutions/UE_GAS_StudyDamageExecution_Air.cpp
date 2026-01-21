@@ -40,9 +40,9 @@ void UUE_GAS_StudyDamageExecution_Air::Execute_Implementation(
 
 	AActor* EffectCauser = EffectContextHandle.GetEffectCauser();
 
-	UAbilitySystemComponent* EffectASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(EffectCauser);
+	UAbilitySystemComponent* EffectASC = ExecutionParams.GetTargetAbilitySystemComponent();
 
-	UAbilitySystemComponent* OriginalASC = EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+	UAbilitySystemComponent* OriginalASC = ExecutionParams.GetSourceAbilitySystemComponent();
 
 	float Defence = 0.0f;
 	if (const UUE_GAS_StudyCharacterAttributeSet* EffectArr = Cast<UUE_GAS_StudyCharacterAttributeSet>(

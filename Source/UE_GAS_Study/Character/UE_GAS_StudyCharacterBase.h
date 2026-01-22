@@ -10,6 +10,8 @@
 #include "GameFramework/Character.h"
 #include "UE_GAS_StudyCharacterBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FGenericAbilityCoolDownDelegate, FGameplayTagContainer, OutAbilityTag, float, CoolDownTime);
+
 UCLASS(config=Game)
 class UE_GAS_STUDY_API AUE_GAS_StudyCharacterBase : public ACharacter, public IAbilitySystemInterface,
                                                     public IGameplayCueInterface, public IGameplayTagAssetInterface
@@ -86,4 +88,13 @@ public:
 	virtual bool HasAllMatchingGameplayTags(const FGameplayTagContainer& TagContainer) const override;
 	//具有对应标签
 	virtual bool HasAnyMatchingGameplayTags(const FGameplayTagContainer& TagContainer) const override;
+	
+public:
+	
+	UPROPERTY(BlueprintAssignable)
+	FGenericAbilityCoolDownDelegate AbilityCoolDownDelegate;
+	
+protected:
+	UFUNCTION(BlueprintCallable, Client,Reliable)
+	void ClientRPCFunction(FGameplayTagContainer OutAbilityTag, float CoolDownTime);
 };

@@ -65,6 +65,16 @@ void AUE_GAS_StudyCharacterBase::BeginPlay()
 		DeathAbilityCDOSpec.SourceObject = this;
 		DeathAbilityHandle = AbilitySystemComponent->GiveAbility(DeathAbilityCDOSpec);
 		
+		AbilitySystemComponent->AbilityCommittedCallbacks.AddLambda(
+		[this](UGameplayAbility* InGameplayAbility)
+		{
+			float CoolDownTime = InGameplayAbility->GetCooldownTimeRemaining();
+			FGameplayTagContainer AbilityTags = InGameplayAbility->AbilityTags;
+			
+			ClientRPCFunction(AbilityTags,CoolDownTime);
+		}
+		);
+		
 	}
 	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent);
 }
@@ -171,6 +181,12 @@ bool AUE_GAS_StudyCharacterBase::HasAnyMatchingGameplayTags(const FGameplayTagCo
 		return GAS->HasAnyMatchingGameplayTags(TagContainer);
 	}
 	return false;
+}
+
+void AUE_GAS_StudyCharacterBase::ClientRPCFunction_Implementation(FGameplayTagContainer OutAbilityTag,
+	float CoolDownTime)
+{
+	AbilityCoolDownDelegate.Broadcast(OutAbilityTag, CoolDownTime);
 }
 
 class AUE_GAS_StudyPlayerState* AUE_GAS_StudyCharacterBase::GetGASStudyPlayerState() const

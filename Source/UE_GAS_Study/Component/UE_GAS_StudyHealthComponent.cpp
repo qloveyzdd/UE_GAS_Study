@@ -120,6 +120,9 @@ void UUE_GAS_StudyHealthComponent::InitializeWithAbilitySystem(class UUE_GAS_Stu
 
 	OnHealthChanged.Broadcast(this, HealthSet->GetHealth(), HealthSet->GetHealth(), nullptr);
 	OnMaxHealthChanged.Broadcast(this, HealthSet->GetMaxHealth(), HealthSet->GetMaxHealth(), nullptr);
+	
+	OnManaChanged.Broadcast(this, HealthSet->GetMana(), HealthSet->GetMana(), nullptr);
+	OnMaxManaChanged.Broadcast(this, HealthSet->GetMaxMana(), HealthSet->GetMaxMana(), nullptr);
 }
 
 void UUE_GAS_StudyHealthComponent::UnInitializeWithAbilitySystem(class UUE_GAS_StudyAbilitySystemComponent* InASC)

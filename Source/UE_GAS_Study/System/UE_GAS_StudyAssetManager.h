@@ -15,4 +15,10 @@ public:
 	UUE_GAS_StudyAssetManager();
 	
 	virtual void StartInitialLoading() override;
+	
+	static const FPrimaryAssetType PotionItemType;
+	static const FPrimaryAssetType EquipmentItemType;
+	static const FPrimaryAssetType TokenItemType;
+	
+	UUE_GAS_StudyAssetManager* ForceLoadItem(const FPrimaryAssetId& PrimaryAssetId,bool bLogWarning = true);
 };

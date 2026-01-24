@@ -28,6 +28,6 @@ void UUI_InventorySlot::OnClickedWidget()
 
 	if (AUE_GAS_StudyCharacterBase*InCharacter = GetGASStudyCharacterBase())
 	{
-		InCharacter->ActiveSkillByInventoryId_Implementation(InventoryId);
+		InCharacter->ActiveSkillByInventoryId(InventoryId);
 	}
 }

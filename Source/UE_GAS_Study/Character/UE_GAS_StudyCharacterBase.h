@@ -31,6 +31,9 @@ protected:
 	//生命组件
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|Character", meta=(AllowPrivateAccess=true))
 	TObjectPtr<class UUE_GAS_StudyHealthComponent> HealthComponent;
+	//背包组件
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|Character", meta=(AllowPrivateAccess=true))
+	TObjectPtr<class UUE_GAS_StudyInventoryComponent> InventoryComponent;
 
 public:
 	AUE_GAS_StudyCharacterBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
@@ -76,6 +79,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
 	class AUE_GAS_StudyPlayerState* GetGASStudyPlayerState() const;
+	
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
+	class UUE_GAS_StudyInventoryComponent* GetGASStudyInventoryComponent() const;
 
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

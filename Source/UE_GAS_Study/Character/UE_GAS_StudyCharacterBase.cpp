@@ -7,6 +7,7 @@
 #include "UE_GAS_Study/AbilitySystem/Attributes/UE_GAS_StudyCharacterAttributeSet.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyComboComponent.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyHealthComponent.h"
+#include "UE_GAS_Study/Component/UE_GAS_StudyInventoryComponent.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerController.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerState.h"
 
@@ -32,6 +33,9 @@ AUE_GAS_StudyCharacterBase::AUE_GAS_StudyCharacterBase(const FObjectInitializer&
 	HealthComponent->OnDeathStarted.AddDynamic(this, &ThisClass::OnDeathStarted);
 	HealthComponent->OnDeathFinished.AddDynamic(this, &ThisClass::OnDeathFinished);
 	HealthComponent->SetIsReplicated(true);
+	
+	InventoryComponent = CreateDefaultSubobject<UUE_GAS_StudyInventoryComponent>(TEXT("InventoryComponent"));
+	InventoryComponent->SetIsReplicated(true);
 
 	//同步频率更新
 	NetUpdateFrequency = 100.0f;
@@ -141,6 +145,11 @@ class UUE_GAS_StudyComboComponent* AUE_GAS_StudyCharacterBase::GetGASStudyComboC
 class UUE_GAS_StudyHealthComponent* AUE_GAS_StudyCharacterBase::GetGASStudyHealthComponent() const
 {
 	return CastChecked<UUE_GAS_StudyHealthComponent>(HealthComponent, ECastCheckedType::NullAllowed);
+}
+
+class UUE_GAS_StudyInventoryComponent* AUE_GAS_StudyCharacterBase::GetGASStudyInventoryComponent() const
+{
+	return CastChecked<UUE_GAS_StudyInventoryComponent>(InventoryComponent, ECastCheckedType::NullAllowed);
 }
 
 UAbilitySystemComponent* AUE_GAS_StudyCharacterBase::GetAbilitySystemComponent() const

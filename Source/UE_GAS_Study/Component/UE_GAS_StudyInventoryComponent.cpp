@@ -3,8 +3,13 @@
 
 #include "UE_GAS_StudyInventoryComponent.h"
 
+#include "AbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "UE_GAS_Study/AbilitySystem/Abilities/UE_GAS_StudyGameplayAbility.h"
+#include "UE_GAS_Study/Character/UE_GAS_StudyCharacterBase.h"
+#include "UE_GAS_Study/Item/UE_GAS_StudyEquipment.h"
 #include "UE_GAS_Study/Item/UE_GAS_StudyItemBase.h"
+#include "UE_GAS_Study/Item/UE_GAS_StudyPotion.h"
 
 
 FUE_GAS_StudyInventoryItem::FUE_GAS_StudyInventoryItem()
@@ -59,6 +64,37 @@ void UUE_GAS_StudyInventoryComponent::BeginPlay()
 }
 
 void UUE_GAS_StudyInventoryComponent::OnRep_InventoryItems()
+{
+	OnInventoryItemChanged.ExecuteIfBound(InventoryItems);
+}
+
+void UUE_GAS_StudyInventoryComponent::ActiveSkillByInventoryId(int32 InInventoryId)
+{
+	if (InventoryItems[InInventoryId].IsValid())
+	{
+		if (UUE_GAS_StudyPotion* InPotion = Cast<UUE_GAS_StudyPotion>(InventoryItems[InInventoryId].GAS_StudyItem))
+		{
+			UAbilitySystemComponent*AbilitySystemComponent = Cast<AUE_GAS_StudyCharacterBase>(GetOwner())->GetAbilitySystemComponent();
+			UUE_GAS_StudyGameplayAbility* InGA = Cast<UUE_GAS_StudyGameplayAbility>(InPotion->GrantedAbility.GetDefaultObject());
+			FGameplayAbilitySpecHandle Handle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(InGA));
+			AbilitySystemComponent->TryActivateAbility(Handle);
+			
+			AbilitySystemComponent->SetRemoveAbilityOnEnd(Handle);
+		}
+		else if (UUE_GAS_StudyEquipment* InEquipment = Cast<UUE_GAS_StudyEquipment>(InventoryItems[InInventoryId].GAS_StudyItem))
+		{
+			
+		}
+	}
+}
+
+void UUE_GAS_StudyInventoryComponent::CallServerDownLoadInfo()
+{
+	InventoryItemChange(InventoryItems);
+}
+
+void UUE_GAS_StudyInventoryComponent::InventoryItemChange_Implementation(
+	const TArray<FUE_GAS_StudyInventoryItem>& ClientInventoryItems)
 {
 	OnInventoryItemChanged.ExecuteIfBound(InventoryItems);
 }

@@ -192,8 +192,24 @@ bool AUE_GAS_StudyCharacterBase::HasAnyMatchingGameplayTags(const FGameplayTagCo
 	return false;
 }
 
+void AUE_GAS_StudyCharacterBase::CallServerDownLoadInfo_Implementation()
+{
+	if (InventoryComponent)
+	{
+		InventoryComponent->CallServerDownLoadInfo();
+	}
+}
+
+void AUE_GAS_StudyCharacterBase::ActiveSkillByInventoryId_Implementation(int32 InInventoryId)
+{
+	if (InventoryComponent)
+	{
+		InventoryComponent->ActiveSkillByInventoryId(InInventoryId);
+	}
+}
+
 void AUE_GAS_StudyCharacterBase::ClientRPCFunction_Implementation(FGameplayTagContainer OutAbilityTag,
-	float CoolDownTime)
+                                                                  float CoolDownTime)
 {
 	AbilityCoolDownDelegate.Broadcast(OutAbilityTag, CoolDownTime);
 }

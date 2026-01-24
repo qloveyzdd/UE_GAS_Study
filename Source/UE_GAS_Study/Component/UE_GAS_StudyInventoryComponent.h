@@ -53,6 +53,14 @@ public:
 	void OnRep_InventoryItems();
 	
 public:
+	
+	void ActiveSkillByInventoryId(int32 InInventoryId);
+	
+	void CallServerDownLoadInfo();
+	
+	UFUNCTION(Client,Reliable)
+	void InventoryItemChange(const TArray<FUE_GAS_StudyInventoryItem>& ClientInventoryItems);
+	
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	bool AddInventoryItem(FUE_GAS_StudyInventoryItem NewItem);
 	

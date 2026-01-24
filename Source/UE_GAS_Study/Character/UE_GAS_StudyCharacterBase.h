@@ -103,4 +103,11 @@ public:
 protected:
 	UFUNCTION(BlueprintCallable, Client,Reliable)
 	void ClientRPCFunction(FGameplayTagContainer OutAbilityTag, float CoolDownTime);
+	
+	UFUNCTION(Server,Reliable)
+	void ActiveSkillByInventoryId(int32 InInventoryId);
+	
+public:
+	UFUNCTION(Server,Reliable)
+	void CallServerDownLoadInfo();
 };

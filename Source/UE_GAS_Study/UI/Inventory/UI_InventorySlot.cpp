@@ -7,7 +7,6 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "UE_GAS_Study/Character/UE_GAS_StudyCharacterBase.h"
-#include "UE_GAS_Study/Component/UE_GAS_StudyInventoryComponent.h"
 #include "UE_GAS_Study/UI/Common/UI_ICONDragDrog.h"
 
 UUI_InventorySlot::UUI_InventorySlot(const FObjectInitializer& ObjectInitializer)

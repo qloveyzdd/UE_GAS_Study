@@ -6,6 +6,7 @@
 #include "UE_GAS_Study/AbilitySystem/Abilities/UE_GAS_StudyGameplayAbility.h"
 #include "UE_GAS_Study/AbilitySystem/Attributes/UE_GAS_StudyCharacterAttributeSet.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyComboComponent.h"
+#include "UE_GAS_Study/Component/UE_GAS_StudyEquipmentComponent.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyHealthComponent.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyInventoryComponent.h"
 #include "UE_GAS_Study/Player/UE_GAS_StudyPlayerController.h"
@@ -36,6 +37,9 @@ AUE_GAS_StudyCharacterBase::AUE_GAS_StudyCharacterBase(const FObjectInitializer&
 	
 	InventoryComponent = CreateDefaultSubobject<UUE_GAS_StudyInventoryComponent>(TEXT("InventoryComponent"));
 	InventoryComponent->SetIsReplicated(true);
+	
+	EquipmentComponent = CreateDefaultSubobject<UUE_GAS_StudyEquipmentComponent>(TEXT("EquipmentComponent"));
+	EquipmentComponent->SetIsReplicated(true);
 
 	//同步频率更新
 	NetUpdateFrequency = 100.0f;
@@ -152,6 +156,11 @@ class UUE_GAS_StudyInventoryComponent* AUE_GAS_StudyCharacterBase::GetGASStudyIn
 	return CastChecked<UUE_GAS_StudyInventoryComponent>(InventoryComponent, ECastCheckedType::NullAllowed);
 }
 
+class UUE_GAS_StudyEquipmentComponent* AUE_GAS_StudyCharacterBase::GetGASStudyEquipmentComponent() const
+{
+	return CastChecked<UUE_GAS_StudyEquipmentComponent>(EquipmentComponent, ECastCheckedType::NullAllowed);
+}
+
 UAbilitySystemComponent* AUE_GAS_StudyCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -192,6 +201,14 @@ bool AUE_GAS_StudyCharacterBase::HasAnyMatchingGameplayTags(const FGameplayTagCo
 	return false;
 }
 
+void AUE_GAS_StudyCharacterBase::UndockEquipmentById_Implementation(int32 InUndockEquipmentID)
+{
+	if (EquipmentComponent)
+	{
+		EquipmentComponent->UndockEquipmentById(InUndockEquipmentID);
+	}
+}
+
 void AUE_GAS_StudyCharacterBase::SwapInventoryItem_Implementation(int32 Index_i,int32 Index_j)
 {
 	if (InventoryComponent)
@@ -205,6 +222,10 @@ void AUE_GAS_StudyCharacterBase::CallServerDownLoadInfo_Implementation()
 	if (InventoryComponent)
 	{
 		InventoryComponent->CallServerDownLoadInfo();
+	}
+	if (EquipmentComponent)
+	{
+		EquipmentComponent->CallServerDownLoadInfo();
 	}
 }
 

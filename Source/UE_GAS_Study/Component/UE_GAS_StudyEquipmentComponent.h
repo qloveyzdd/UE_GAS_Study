@@ -49,6 +49,8 @@ public:
 	UFUNCTION(Client, Reliable)
 	void EquipmentItemChange(const TArray<FUE_GAS_StudyEquipmentItem>& ClientEquipmentItems);
 	
+	void CallServerDownLoadInfo();
+	
 public:
 	UFUNCTION(BlueprintCallable, Category="Equipment")
 	bool AddEquipmentItem(const FUE_GAS_StudyEquipmentItem& NewItem);

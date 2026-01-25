@@ -19,7 +19,7 @@ private:
 	class UUniformGridPanel* InventoryArray;
 
 	UPROPERTY(EditDefaultsOnly, Category=UI)
-	TSubclassOf<class UUI_InventorySlot> InventoryClass;
+	TSubclassOf<class UUI_InventorySlot> SlotClass;
 	
 public:
 	virtual void NativeConstruct() override;

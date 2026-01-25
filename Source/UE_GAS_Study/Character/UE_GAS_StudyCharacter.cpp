@@ -13,6 +13,7 @@
 #include "UE_GAS_Study/UE_GAS_StudyGameplayTag.h"
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
 #include "UE_GAS_Study/Component/UE_GAS_StudyComboComponent.h"
+#include "UE_GAS_Study/Player/UE_GAS_StudyPlayerController.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -20,11 +21,11 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 // AUE_GAS_StudyCharacter
 
 AUE_GAS_StudyCharacter::AUE_GAS_StudyCharacter(const FObjectInitializer& ObjectInitializer)
-	:Super(ObjectInitializer)
+	: Super(ObjectInitializer)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -51,7 +52,8 @@ AUE_GAS_StudyCharacter::AUE_GAS_StudyCharacter(const FObjectInitializer& ObjectI
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -66,7 +68,8 @@ void AUE_GAS_StudyCharacter::BeginPlay()
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
@@ -79,31 +82,41 @@ void AUE_GAS_StudyCharacter::BeginPlay()
 void AUE_GAS_StudyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::ActiveJump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AUE_GAS_StudyCharacter::UnActiveJump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this,
+		                                   &AUE_GAS_StudyCharacter::ActiveJump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this,
+		                                   &AUE_GAS_StudyCharacter::UnActiveJump);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUE_GAS_StudyCharacter::Move);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE_GAS_StudyCharacter::Look);
-		
+
 		//Melee
-		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::ActiveMelee);
-		
-		EnhancedInputComponent->BindAction(AirAttackAction, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::ActiveAirAttack);
-		
+		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Started, this,
+		                                   &AUE_GAS_StudyCharacter::ActiveMelee);
+
+		EnhancedInputComponent->BindAction(AirAttackAction, ETriggerEvent::Started, this,
+		                                   &AUE_GAS_StudyCharacter::ActiveAirAttack);
+
 		EnhancedInputComponent->BindAction(KeyAction_1, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_1);
 		EnhancedInputComponent->BindAction(KeyAction_2, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_2);
 		EnhancedInputComponent->BindAction(KeyAction_3, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_3);
 		EnhancedInputComponent->BindAction(KeyAction_4, ETriggerEvent::Started, this, &AUE_GAS_StudyCharacter::Key_4);
+
+		EnhancedInputComponent->BindAction(KeyAction_Tab, ETriggerEvent::Started, this,
+		                                   &AUE_GAS_StudyCharacter::Key_Tab);
 	}
 	else
 	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		UE_LOG(LogTemplateCharacter, Error,
+		       TEXT(
+			       "'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."
+		       ), *GetNameSafe(this));
 	}
 }
 
@@ -120,7 +133,7 @@ void AUE_GAS_StudyCharacter::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
@@ -145,60 +158,66 @@ void AUE_GAS_StudyCharacter::Look(const FInputActionValue& Value)
 
 void AUE_GAS_StudyCharacter::ActiveJump()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Jump"),true);
-	
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Jump"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::UnActiveJump()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Jump"),true);
-	
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Jump"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::ActiveMelee()
 {
 	GetGASStudyComboComponent()->SetPressed();
-	
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Melee"),true);
-	
+
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Melee"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::ActiveAirAttack()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.AirAttack"),true);
-	
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.AirAttack"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::Key_1()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.1"),true);
-	
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.1"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::Key_2()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.2"),true);
-	
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.2"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::Key_3()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.3"),true);
-	
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.3"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
 }
 
 void AUE_GAS_StudyCharacter::Key_4()
 {
-	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.4"),true);
-	
+	FGameplayTag InputTag = UE_GAS_StudyGameplayTags::FindTagByString(TEXT("InputTag.Key.4"), true);
+
 	GetGASStudyAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AUE_GAS_StudyCharacter::Key_Tab()
+{
+	bool bShowMouse = GetGASStudyPlayerController()->bShowMouseCursor;
+	GetGASStudyPlayerController()->SetShowMouseCursor(!bShowMouse);
 }
 
 void AUE_GAS_StudyCharacter::ComboMelee()

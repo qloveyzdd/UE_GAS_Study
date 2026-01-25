@@ -72,6 +72,10 @@ private:
 	/** KeyAction_4 Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* KeyAction_4;
+	
+	/** KeyAction_Tab Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* KeyAction_Tab;
 
 
 
@@ -96,6 +100,8 @@ protected:
 	void Key_2();
 	void Key_3();
 	void Key_4();
+	
+	void Key_Tab();
 	
 public:
 	void ComboMelee();

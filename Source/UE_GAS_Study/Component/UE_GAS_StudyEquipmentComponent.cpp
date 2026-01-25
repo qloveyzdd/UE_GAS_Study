@@ -40,6 +40,9 @@ UUE_GAS_StudyEquipmentComponent::UUE_GAS_StudyEquipmentComponent(const FObjectIn
 	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
+	EquipmentItems.AddDefaulted(6);
+	
+	SetIsReplicatedByDefault(true);
 }
 
 
@@ -172,6 +175,4 @@ void UUE_GAS_StudyEquipmentComponent::GetLifetimeReplicatedProps(
 void UUE_GAS_StudyEquipmentComponent::OnRep_EquipmentItems()
 {
 	OnEquipmentItemChanged.ExecuteIfBound(EquipmentItems);
-
-	EquipmentItems.AddDefaulted(6);
 }

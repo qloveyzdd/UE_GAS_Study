@@ -4,6 +4,7 @@
 #include "UE_GAS_StudyInventoryComponent.h"
 
 #include "AbilitySystemComponent.h"
+#include "UE_GAS_StudyEquipmentComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "UE_GAS_Study/AbilitySystem/Abilities/UE_GAS_StudyGameplayAbility.h"
 #include "UE_GAS_Study/Character/UE_GAS_StudyCharacterBase.h"
@@ -74,16 +75,32 @@ void UUE_GAS_StudyInventoryComponent::ActiveSkillByInventoryId(int32 InInventory
 	{
 		if (UUE_GAS_StudyPotion* InPotion = Cast<UUE_GAS_StudyPotion>(InventoryItems[InInventoryId].GAS_StudyItem))
 		{
-			UAbilitySystemComponent*AbilitySystemComponent = Cast<AUE_GAS_StudyCharacterBase>(GetOwner())->GetAbilitySystemComponent();
-			UUE_GAS_StudyGameplayAbility* InGA = Cast<UUE_GAS_StudyGameplayAbility>(InPotion->GrantedAbility.GetDefaultObject());
+			UAbilitySystemComponent* AbilitySystemComponent = Cast<AUE_GAS_StudyCharacterBase>(GetOwner())->
+				GetAbilitySystemComponent();
+			UUE_GAS_StudyGameplayAbility* InGA = Cast<UUE_GAS_StudyGameplayAbility>(
+				InPotion->GrantedAbility.GetDefaultObject());
 			FGameplayAbilitySpecHandle Handle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(InGA));
 			AbilitySystemComponent->TryActivateAbility(Handle);
-			
+
 			AbilitySystemComponent->SetRemoveAbilityOnEnd(Handle);
 		}
-		else if (UUE_GAS_StudyEquipment* InEquipment = Cast<UUE_GAS_StudyEquipment>(InventoryItems[InInventoryId].GAS_StudyItem))
+		else if (UUE_GAS_StudyEquipment* InEquipment = Cast<UUE_GAS_StudyEquipment>(
+			InventoryItems[InInventoryId].GAS_StudyItem))
 		{
+			UUE_GAS_StudyEquipmentComponent* EquipmentComponent = Cast<UUE_GAS_StudyEquipmentComponent>(
+				GetOwner()->FindComponentByClass(UUE_GAS_StudyEquipmentComponent::StaticClass()));
 			
+			FUE_GAS_StudyEquipmentItem InEquipmentItem;
+			InEquipmentItem.RPGEquipmentItemPoint = InEquipment;
+
+			if (EquipmentComponent)
+			{
+				bool bAddEquipment = EquipmentComponent->AddEquipmentItem(InEquipmentItem);
+				if (bAddEquipment)
+				{
+					RemoveInventoryItem(InInventoryId);
+				}
+			}
 		}
 	}
 }

@@ -46,7 +46,7 @@ void UUI_InventoryPanel::OnInventoryItemChanged(const TArray<struct FUE_GAS_Stud
 		{
 			for (int j = 0; j < 6; ++j)
 			{
-				if (UUI_InventorySlot* SlotWidget = CreateWidget<UUI_InventorySlot>(GetWorld(),InventoryClass))
+				if (UUI_InventorySlot* SlotWidget = CreateWidget<UUI_InventorySlot>(GetWorld(),SlotClass))
 				{
 					SlotWidget->InventoryId = i * 6 + j;
 					if (UUniformGridSlot* GridSlot = InventoryArray->AddChildToUniformGrid(SlotWidget,i,j))

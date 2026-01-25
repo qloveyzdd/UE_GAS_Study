@@ -57,6 +57,11 @@ void UUE_GAS_StudyEquipmentComponent::TickComponent(float DeltaTime, enum ELevel
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+void UUE_GAS_StudyEquipmentComponent::CallServerDownLoadInfo()
+{
+	EquipmentItemChange(EquipmentItems);
+}
+
 bool UUE_GAS_StudyEquipmentComponent::AddEquipmentItem(const FUE_GAS_StudyEquipmentItem& NewItem)
 {
 	UUE_GAS_StudyAbilitySystemComponent* ASC = Cast<AUE_GAS_StudyCharacterBase>(GetOwner())->

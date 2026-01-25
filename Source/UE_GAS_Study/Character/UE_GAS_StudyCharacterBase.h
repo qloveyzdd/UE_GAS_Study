@@ -34,6 +34,9 @@ protected:
 	//背包组件
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|Character", meta=(AllowPrivateAccess=true))
 	TObjectPtr<class UUE_GAS_StudyInventoryComponent> InventoryComponent;
+	//装备组件
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UE_GAS_Study|Character", meta=(AllowPrivateAccess=true))
+	TObjectPtr<class UUE_GAS_StudyEquipmentComponent> EquipmentComponent;
 
 public:
 	AUE_GAS_StudyCharacterBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
@@ -82,6 +85,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
 	class UUE_GAS_StudyInventoryComponent* GetGASStudyInventoryComponent() const;
+	UFUNCTION(BlueprintCallable, Category="UE_GAS_Study|Character")
+	class UUE_GAS_StudyEquipmentComponent* GetGASStudyEquipmentComponent() const;
 
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
@@ -113,4 +118,7 @@ public:
 	
 	UFUNCTION(Server,Reliable)
 	void SwapInventoryItem(int32 Index_i,int32 Index_j);
+	
+	UFUNCTION(Server,Reliable)
+	void UndockEquipmentById(int32 InUndockEquipmentID);
 };

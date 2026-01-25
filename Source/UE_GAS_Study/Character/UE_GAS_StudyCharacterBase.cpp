@@ -192,6 +192,14 @@ bool AUE_GAS_StudyCharacterBase::HasAnyMatchingGameplayTags(const FGameplayTagCo
 	return false;
 }
 
+void AUE_GAS_StudyCharacterBase::SwapInventoryItem_Implementation(int32 Index_i,int32 Index_j)
+{
+	if (InventoryComponent)
+	{
+		InventoryComponent->SwapInventoryItem(Index_i,Index_j);
+	}
+}
+
 void AUE_GAS_StudyCharacterBase::CallServerDownLoadInfo_Implementation()
 {
 	if (InventoryComponent)

@@ -110,4 +110,7 @@ public:
 public:
 	UFUNCTION(Server,Reliable)
 	void CallServerDownLoadInfo();
+	
+	UFUNCTION(Server,Reliable)
+	void SwapInventoryItem(int32 Index_i,int32 Index_j);
 };

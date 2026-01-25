@@ -40,4 +40,7 @@ public:
 
 	UFUNCTION()
 	virtual void OnClickedWidget();
+	
+	UFUNCTION()
+	ESlotType GetSlotType();
 };

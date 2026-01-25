@@ -42,3 +42,8 @@ UWidget* UUI_SlotBase::GetSlotTip()
 void UUI_SlotBase::OnClickedWidget()
 {
 }
+
+ESlotType UUI_SlotBase::GetSlotType()
+{
+	return SlotType;
+}

@@ -8,6 +8,8 @@
 #include "UE_GAS_Study/UE_GAS_StudyLogChannel.h"
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
 #include "UE_GAS_Study/AbilitySystem/Attributes/UE_GAS_StudyCharacterAttributeSet.h"
+#include "UE_GAS_Study/System/UE_GAS_StudyAssetManager.h"
+#include "UE_GAS_Study/System/UE_GAS_StudyGameData.h"
 
 UE_DEFINE_GAMEPLAY_TAG(TAG_Gameplay_Damage, "Gameplay.Damage");
 UE_DEFINE_GAMEPLAY_TAG(TAG_Gameplay_DamageImmunity, "Gameplay.DamageImmunity");
@@ -240,6 +242,37 @@ void UUE_GAS_StudyHealthComponent::FinishDeath()
 
 void UUE_GAS_StudyHealthComponent::DamageSelfDestroy(bool bFellOutOfWorld)
 {
+	if ((DeathState == EGAS_StudyDeathState::NotDead) && AbilitySystemComponent)
+	{
+		const TSubclassOf<UGameplayEffect> DamageGE = UUE_GAS_StudyAssetManager::GetSubclass(UUE_GAS_StudyGameData::Get().DamageGameplayEffect_SetByCaller);
+		if (!DamageGE)
+		{
+			UE_LOG(LogGAS_Study, Error, TEXT("LyraHealthComponent: DamageSelfDestruct failed for owner [%s]. Unable to find gameplay effect [%s]."),
+				*GetNameSafe(GetOwner()), *UUE_GAS_StudyGameData::Get().DamageGameplayEffect_SetByCaller.GetAssetName());
+			return;
+		}
+
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DamageGE, 1.0f, AbilitySystemComponent->MakeEffectContext());
+		FGameplayEffectSpec* Spec = SpecHandle.Data.Get();
+
+		if (!Spec)
+		{
+			UE_LOG(LogGAS_Study, Error, TEXT("LyraHealthComponent: DamageSelfDestruct failed for owner [%s]. Unable to make outgoing spec for [%s]."), *GetNameSafe(GetOwner()), *GetNameSafe(DamageGE));
+			return;
+		}
+
+		Spec->AddDynamicAssetTag(TAG_Gameplay_DamageSelfDestruct);
+
+		if (bFellOutOfWorld)
+		{
+			Spec->AddDynamicAssetTag(TAG_Gameplay_FellOutOfWorld);
+		}
+
+		const float DamageAmount = GetMaxHealth();
+
+		Spec->SetSetByCallerMagnitude(UE_GAS_StudyGameplayTags::SetByCaller_Damage, DamageAmount);
+		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*Spec);
+	}
 }
 
 void UUE_GAS_StudyHealthComponent::OnUnregister()

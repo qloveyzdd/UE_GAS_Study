@@ -34,10 +34,10 @@ AUE_GAS_StudyCharacterBase::AUE_GAS_StudyCharacterBase(const FObjectInitializer&
 	HealthComponent->OnDeathStarted.AddDynamic(this, &ThisClass::OnDeathStarted);
 	HealthComponent->OnDeathFinished.AddDynamic(this, &ThisClass::OnDeathFinished);
 	HealthComponent->SetIsReplicated(true);
-	
+
 	InventoryComponent = CreateDefaultSubobject<UUE_GAS_StudyInventoryComponent>(TEXT("InventoryComponent"));
 	InventoryComponent->SetIsReplicated(true);
-	
+
 	EquipmentComponent = CreateDefaultSubobject<UUE_GAS_StudyEquipmentComponent>(TEXT("EquipmentComponent"));
 	EquipmentComponent->SetIsReplicated(true);
 
@@ -67,22 +67,22 @@ void AUE_GAS_StudyCharacterBase::BeginPlay()
 
 			AbilitiesToActive.Add(TempAbilityPair.Key, AbilitySpecHandle);
 		}
-		
-		UUE_GAS_StudyGameplayAbility* DeathAbilityCDO = DeathAbilityClass->GetDefaultObject<UUE_GAS_StudyGameplayAbility>();
+
+		UUE_GAS_StudyGameplayAbility* DeathAbilityCDO = DeathAbilityClass->GetDefaultObject<
+			UUE_GAS_StudyGameplayAbility>();
 		FGameplayAbilitySpec DeathAbilityCDOSpec(DeathAbilityCDO, 1);
 		DeathAbilityCDOSpec.SourceObject = this;
 		DeathAbilityHandle = AbilitySystemComponent->GiveAbility(DeathAbilityCDOSpec);
-		
+
 		AbilitySystemComponent->AbilityCommittedCallbacks.AddLambda(
-		[this](UGameplayAbility* InGameplayAbility)
-		{
-			float CoolDownTime = InGameplayAbility->GetCooldownTimeRemaining();
-			FGameplayTagContainer AbilityTags = InGameplayAbility->AbilityTags;
-			
-			ClientRPCFunction(AbilityTags,CoolDownTime);
-		}
+			[this](UGameplayAbility* InGameplayAbility)
+			{
+				float CoolDownTime = InGameplayAbility->GetCooldownTimeRemaining();
+				FGameplayTagContainer AbilityTags = InGameplayAbility->AbilityTags;
+
+				ClientRPCFunction(AbilityTags, CoolDownTime);
+			}
 		);
-		
 	}
 	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent);
 }
@@ -201,12 +201,21 @@ bool AUE_GAS_StudyCharacterBase::HasAnyMatchingGameplayTags(const FGameplayTagCo
 	return false;
 }
 
-void AUE_GAS_StudyCharacterBase::SwapFromInventoryToEquipment_Implementation(int32 InInventory_Index,
-	int32 InEquipment_Index)
+void AUE_GAS_StudyCharacterBase::SwapFromEquipmentToInventory_Implementation(
+	int32 InEquipment_Index, int32 InInventory_Index)
 {
-	if (EquipmentComponent&&InventoryComponent)
+	if (EquipmentComponent && InventoryComponent)
 	{
-		EquipmentComponent->SwapFromInventoryToEquipment(InInventory_Index,InEquipment_Index);
+		EquipmentComponent->SwapFromEquipmentToInventory(InEquipment_Index, InInventory_Index);
+	}
+}
+
+void AUE_GAS_StudyCharacterBase::SwapFromInventoryToEquipment_Implementation(
+	int32 InInventory_Index,int32 InEquipment_Index)
+{
+	if (EquipmentComponent && InventoryComponent)
+	{
+		EquipmentComponent->SwapFromInventoryToEquipment(InInventory_Index, InEquipment_Index);
 	}
 }
 
@@ -214,7 +223,7 @@ void AUE_GAS_StudyCharacterBase::SwapEquipmentItem_Implementation(int32 Index_i,
 {
 	if (EquipmentComponent)
 	{
-		EquipmentComponent->SwapEquipmentItem(Index_i,Index_j);
+		EquipmentComponent->SwapEquipmentItem(Index_i, Index_j);
 	}
 }
 
@@ -226,11 +235,11 @@ void AUE_GAS_StudyCharacterBase::UndockEquipmentById_Implementation(int32 InUndo
 	}
 }
 
-void AUE_GAS_StudyCharacterBase::SwapInventoryItem_Implementation(int32 Index_i,int32 Index_j)
+void AUE_GAS_StudyCharacterBase::SwapInventoryItem_Implementation(int32 Index_i, int32 Index_j)
 {
 	if (InventoryComponent)
 	{
-		InventoryComponent->SwapInventoryItem(Index_i,Index_j);
+		InventoryComponent->SwapInventoryItem(Index_i, Index_j);
 	}
 }
 

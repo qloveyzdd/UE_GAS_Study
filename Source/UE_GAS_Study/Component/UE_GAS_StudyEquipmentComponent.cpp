@@ -8,6 +8,7 @@
 #include "UE_GAS_Study/AbilitySystem/UE_GAS_StudyAbilitySystemComponent.h"
 #include "UE_GAS_Study/Character/UE_GAS_StudyCharacterBase.h"
 #include "UE_GAS_Study/Item/UE_GAS_StudyEquipment.h"
+#include "UE_GAS_Study/Item/UE_GAS_StudyPotion.h"
 
 
 FUE_GAS_StudyEquipmentItem::FUE_GAS_StudyEquipmentItem()
@@ -184,6 +185,55 @@ void UUE_GAS_StudyEquipmentComponent::SwapFromInventoryToEquipment(int32 Invento
 
 void UUE_GAS_StudyEquipmentComponent::SwapFromEquipmentToInventory(int32 EquipmentIndex, int32 InventoryIndex)
 {
+	UUE_GAS_StudyAbilitySystemComponent* ASC = Cast<AUE_GAS_StudyCharacterBase>(GetOwner())->
+		GetGASStudyAbilitySystemComponent();
+	UUE_GAS_StudyInventoryComponent* InventoryComponent = Cast<UUE_GAS_StudyInventoryComponent>(
+		GetOwner()->FindComponentByClass(UUE_GAS_StudyInventoryComponent::StaticClass()));
+
+	FUE_GAS_StudyEquipmentItem NewEquipmentItem;
+	FUE_GAS_StudyInventoryItem NewInventoryItem;
+	bool Equip = false;
+
+	if (UUE_GAS_StudyItemBase* InRPGItem = InventoryComponent->GetInventoryItemByID(InventoryIndex))
+	{
+		if (Cast<UUE_GAS_StudyPotion>(InRPGItem))
+		{
+			return;
+		}
+		if (Cast<UUE_GAS_StudyEquipment>(InRPGItem))
+		{
+			NewEquipmentItem.RPGEquipmentItemPoint = Cast<UUE_GAS_StudyEquipment>(InRPGItem);
+			Equip = true;
+		}
+		else
+		{
+			NewEquipmentItem.RPGEquipmentItemPoint = nullptr;
+		}
+	}
+	else
+	{
+		NewEquipmentItem.RPGEquipmentItemPoint = nullptr;
+	}
+
+	NewInventoryItem.GAS_StudyItem = EquipmentItems[EquipmentIndex].RPGEquipmentItemPoint;
+	NewInventoryItem.ItemCount = 1;
+
+	RemoveEquipmentItem(EquipmentIndex);
+	EquipmentItems[EquipmentIndex] = NewEquipmentItem;
+
+	if (Equip)
+	{
+		const FGameplayEffectSpecHandle NewHandle = ASC->MakeOutgoingSpec(
+			EquipmentItems[EquipmentIndex].RPGEquipmentItemPoint->GameplayEffectClass, 1.0f,
+			ASC->MakeEffectContext());
+		EquipmentItems[EquipmentIndex].ActiveEquipmentEffectHandle = ASC->ApplyGameplayEffectSpecToSelf(
+			*NewHandle.Data);
+	}
+	
+	InventoryComponent->ReplaceInventoryItem(NewInventoryItem, InventoryIndex);
+
+	CallServerDownLoadInfo();
+	InventoryComponent->CallServerDownLoadInfo();
 }
 
 void UUE_GAS_StudyEquipmentComponent::SwapEquipmentItem(int32 Index_i, int32 Index_j)

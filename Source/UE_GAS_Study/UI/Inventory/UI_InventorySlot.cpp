@@ -7,7 +7,10 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "UE_GAS_Study/Character/UE_GAS_StudyCharacterBase.h"
+#include "UE_GAS_Study/Component/UE_GAS_StudyInventoryComponent.h"
+#include "UE_GAS_Study/Item/UE_GAS_StudyEquipment.h"
 #include "UE_GAS_Study/UI/Common/UI_ICONDragDrog.h"
+#include "UE_GAS_Study/UI/Equipment/UI_EquipmentSlot.h"
 
 UUI_InventorySlot::UUI_InventorySlot(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -109,6 +112,21 @@ bool UUI_InventorySlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDro
 					}
 					break;
 				case ESlotType::SlotType_EquipmentSlot:
+					if (UUI_EquipmentSlot* MyEuipmentSlot = Cast<UUI_EquipmentSlot>(InSlotBase))
+					{
+						if (Cast<UUE_GAS_StudyEquipment>(
+								InCharacter->GetGASStudyInventoryComponent()->GetInventoryItemByID(InventoryId)) ||
+							!InCharacter->GetGASStudyInventoryComponent()->GetInventoryItemByID(InventoryId))
+						{
+							InCharacter->SwapFromEquipmentToInventory(MyEuipmentSlot->EquipmentId, InventoryId);
+							bDrop = true;
+						}
+						else
+						{
+							InSlotBase->ShowSlotIcon();
+							bDrop = true;
+						}
+					}
 					break;
 				default:
 					break;

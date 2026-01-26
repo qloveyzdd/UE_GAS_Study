@@ -127,4 +127,7 @@ public:
 	
 	UFUNCTION(Server,Reliable)
 	void SwapFromInventoryToEquipment(int32 InInventory_Index,int32 InEquipment_Index);
+	
+	UFUNCTION(Server,Reliable)
+	void SwapFromEquipmentToInventory(int32 InEquipment_Index,int32 InInventory_Index);
 };

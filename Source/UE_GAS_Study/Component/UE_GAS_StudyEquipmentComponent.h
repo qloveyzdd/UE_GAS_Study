@@ -61,9 +61,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Equipment")
 	bool RemoveEquipmentItem(int32 Index_Remove);
 	
+	UFUNCTION(BlueprintCallable, Category="Equipment")
+	void SwapInventoryItem(int32 Index_i, int32 Index_j);
+	
 public:
 	UFUNCTION(BlueprintCallable, Category="Equipment")
-	void SwapEuipmentItem(int32 Index_i, int32 Index_j);
+	void SwapEquipmentItem(int32 Index_i, int32 Index_j);
 	UFUNCTION(BlueprintCallable, Category="Equipment")
 	void SwapFromInventoryToEquipment(int32 InventoryIndex, int32 EquipmentIndex);
 	UFUNCTION(BlueprintCallable, Category="Equipment")

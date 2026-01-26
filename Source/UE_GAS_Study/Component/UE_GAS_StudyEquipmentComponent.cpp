@@ -41,7 +41,7 @@ UUE_GAS_StudyEquipmentComponent::UUE_GAS_StudyEquipmentComponent(const FObjectIn
 
 	// ...
 	EquipmentItems.AddDefaulted(6);
-	
+
 	SetIsReplicatedByDefault(true);
 }
 
@@ -138,15 +138,55 @@ bool UUE_GAS_StudyEquipmentComponent::RemoveEquipmentItem(int32 Index_Remove)
 	return false;
 }
 
+void UUE_GAS_StudyEquipmentComponent::SwapInventoryItem(int32 Index_i, int32 Index_j)
+{
+	if (HasAuthority())
+	{
+		EquipmentItems.Swap(Index_i, Index_j);
+	}
+}
+
 void UUE_GAS_StudyEquipmentComponent::SwapFromInventoryToEquipment(int32 InventoryIndex, int32 EquipmentIndex)
 {
+	UUE_GAS_StudyAbilitySystemComponent* ASC = Cast<AUE_GAS_StudyCharacterBase>(GetOwner())->
+		GetGASStudyAbilitySystemComponent();
+	UUE_GAS_StudyInventoryComponent* InventoryComponent = Cast<UUE_GAS_StudyInventoryComponent>(
+		GetOwner()->FindComponentByClass(UUE_GAS_StudyInventoryComponent::StaticClass()));
+
+	if (UUE_GAS_StudyItemBase* InRPGItem = InventoryComponent->GetInventoryItemByID(InventoryIndex))
+	{
+		if (Cast<UUE_GAS_StudyEquipment>(InRPGItem))
+		{
+			FUE_GAS_StudyEquipmentItem NewEquipmentItem;
+			FUE_GAS_StudyInventoryItem NewInventoryItem;
+
+			NewEquipmentItem.RPGEquipmentItemPoint = Cast<UUE_GAS_StudyEquipment>(InRPGItem);
+			NewInventoryItem.GAS_StudyItem = EquipmentItems[EquipmentIndex].RPGEquipmentItemPoint;
+			NewInventoryItem.ItemCount = 1;
+
+			RemoveEquipmentItem(EquipmentIndex);
+			EquipmentItems[EquipmentIndex] = NewEquipmentItem;
+
+			const FGameplayEffectSpecHandle NewHandle = ASC->MakeOutgoingSpec(
+				EquipmentItems[EquipmentIndex].RPGEquipmentItemPoint->GameplayEffectClass, 1.0f,
+				ASC->MakeEffectContext());
+			EquipmentItems[EquipmentIndex].ActiveEquipmentEffectHandle = ASC->ApplyGameplayEffectSpecToSelf(
+				*NewHandle.Data);
+
+
+			InventoryComponent->ReplaceInventoryItem(NewInventoryItem, InventoryIndex);
+
+			CallServerDownLoadInfo();
+			InventoryComponent->CallServerDownLoadInfo();
+		}
+	}
 }
 
 void UUE_GAS_StudyEquipmentComponent::SwapFromEquipmentToInventory(int32 EquipmentIndex, int32 InventoryIndex)
 {
 }
 
-void UUE_GAS_StudyEquipmentComponent::SwapEuipmentItem(int32 Index_i, int32 Index_j)
+void UUE_GAS_StudyEquipmentComponent::SwapEquipmentItem(int32 Index_i, int32 Index_j)
 {
 	if (Index_i != Index_j
 		&& Index_i > INDEX_NONE && Index_i < EquipmentItems.Num()

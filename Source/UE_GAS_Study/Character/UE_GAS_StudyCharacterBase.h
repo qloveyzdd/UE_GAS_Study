@@ -121,4 +121,10 @@ public:
 	
 	UFUNCTION(Server,Reliable)
 	void UndockEquipmentById(int32 InUndockEquipmentID);
+	
+	UFUNCTION(Server,Reliable)
+	void SwapEquipmentItem(int32 Index_i,int32 Index_j);
+	
+	UFUNCTION(Server,Reliable)
+	void SwapFromInventoryToEquipment(int32 InInventory_Index,int32 InEquipment_Index);
 };

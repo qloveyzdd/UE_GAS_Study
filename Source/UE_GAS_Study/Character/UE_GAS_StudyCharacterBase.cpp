@@ -201,6 +201,23 @@ bool AUE_GAS_StudyCharacterBase::HasAnyMatchingGameplayTags(const FGameplayTagCo
 	return false;
 }
 
+void AUE_GAS_StudyCharacterBase::SwapFromInventoryToEquipment_Implementation(int32 InInventory_Index,
+	int32 InEquipment_Index)
+{
+	if (EquipmentComponent&&InventoryComponent)
+	{
+		EquipmentComponent->SwapFromInventoryToEquipment(InInventory_Index,InEquipment_Index);
+	}
+}
+
+void AUE_GAS_StudyCharacterBase::SwapEquipmentItem_Implementation(int32 Index_i, int32 Index_j)
+{
+	if (EquipmentComponent)
+	{
+		EquipmentComponent->SwapEquipmentItem(Index_i,Index_j);
+	}
+}
+
 void AUE_GAS_StudyCharacterBase::UndockEquipmentById_Implementation(int32 InUndockEquipmentID)
 {
 	if (EquipmentComponent)
